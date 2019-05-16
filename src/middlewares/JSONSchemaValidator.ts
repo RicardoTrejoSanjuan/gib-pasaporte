@@ -12,7 +12,6 @@ export function JSONSchema(schema: object) {
         const validate = ajv.compile(schema);
 
         const valid = validate(req.body);
-        console.log("valid", valid)
         if (valid) {
             next();
         } else {
