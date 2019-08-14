@@ -24,13 +24,13 @@ describe(`al ejecutar el servidor`, () => {
   });
 
 
-  describe('Al ejecutar un GET /version', () => {
-    test(`Debería retornar un JSON con la versión del package.json`, async () => {
-      const response = await request
-        .get('/version');
-      expect(response.status).toBe(200);
-      expect(response.body).toBeInstanceOf(Object);
-      expect(response.body.version).toEqual(packageJson.version);
+  describe('Al ejecutar un GET /describe', () => {
+    test(`Debería retornar un JSON con la descripción del servicio`, async () => {
+        const response = await request
+            .get('/describe');
+        expect(response.status).toBe(200);
+        expect(response.body).toBeInstanceOf(Object);
+        expect(response.body.version).toEqual(packageJson.version);
     });
   });
 
@@ -43,14 +43,13 @@ describe(`al ejecutar el servidor`, () => {
             name: '33',
           });
         expect(response.status).toBe(400);
-        expect(response.body.code).toBe(-5);
+        expect(response.body.code).toBe(-6);
         expect(response.body.errors).toBeInstanceOf(Array);
       });
     });
 
 
     describe(`al hacer una petición correcta`, () => {
-
       afterEach(() => {
         nock.cleanAll();
         nock.recorder.clear();
@@ -117,7 +116,7 @@ describe(`al ejecutar el servidor`, () => {
         // Este servicio si debe responder con JSON
         expect(response.header['content-type']).toContain('application/json');
         // Status 503 para indicar que hay error en Banxico
-        expect(response.status).toBe(503);
+        expect(response.status).toBe(400);
         expect(response.body.code).toEqual(-1);
         expect(response.body.message).toContain('Error al procesar respuesta');
         expect(response.body.message).toContain('error banxico string');
@@ -126,6 +125,7 @@ describe(`al ejecutar el servidor`, () => {
 
 
       test(`si el servicio de banxico responde error`, async () => {
+        process.env.HTTPS_PROXY = 'http://127.0.0.1:9080';
         nock(routes.consultaEstadoOperacion)
           .post('')
           .reply(404, fixtures.respuestaErrorBanxico);
@@ -133,8 +133,7 @@ describe(`al ejecutar el servidor`, () => {
         const response = await request
           .post('/comprador/consultaMensajesCobro')
           .send(fixtures.consultaMensajesCobroRequest);
-        expect(response.status).toBe(503);
-        // console.log("response.body:", response.body);
+        expect(response.status).toBe(400);
         expect(response.body.code).toBe(-404);
         expect(response.body.details)
           .toBe(JSON.stringify(fixtures.respuestaErrorBanxico));

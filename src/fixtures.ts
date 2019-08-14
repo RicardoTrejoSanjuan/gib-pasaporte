@@ -4,11 +4,11 @@ export const respuestaErrorBanxico = {
 
 export const consultaMensajesCobroRequest = {
     informacionBeneficiario: {
-        numeroCelular: 9,
+        numeroCelular: '5512345678',
         digitoVerificador: 0,
     },
     informacionOrdenante: {
-        numeroCelular: 9,
+        numeroCelular: '5512345678',
         digitoVerificador: 0,
     },
     identificadorMensajeCobro: "string",
@@ -19,11 +19,11 @@ export const consultaMensajesCobroRequest = {
 
 export const consultaMensajesCobroRequestBanxico = {
     v: {
-        nc: 9,
+        nc: '5512345678',
         dv: 0,
     },
     c: {
-        nc: 9,
+        nc: '5512345678',
         dv: 0,
     },
     id: 'string',
