@@ -2,10 +2,11 @@ import { wrap } from 'async-middleware';
 import { Request, Response, Router } from 'express';
 import got from 'got';
 import routes from '../../routes/routes.json';
-import { mapear } from '../middlewares/Mapper';
-const LoggerColors = require('logger-colors');
+import HttpsProxyAgent from 'https-proxy-agent';
+import { Logger, LColor } from 'logger-colors';
+import { mapear } from 'commons';
 const router: Router = Router();
-const logger = new LoggerColors();
+const logger = new Logger();
 
 const separador = '----------------------------------------------------';
 
@@ -14,22 +15,29 @@ const separador = '----------------------------------------------------';
 // ruta está ligada a /comprador/consultaMensajesCobro
 // Usando 'wrap' no tenemos que hacer try-catch para los métodos async
 router.post("/consultaMensajesCobro", wrap(async (req: Request, res: Response) => {
+    const bodyBanxico = "d=" + JSON.stringify(req.body);
+    logger.info('BanxicoRequest', true);
+    logger.info('URL:' + routes.consultaEstadoOperacion);
+    logger.info('BODY: ' + bodyBanxico);
+
+    let agente;
+    if (process.env.HTTPS_PROXY) {
+        const proxy = process.env.HTTPS_PROXY as string;
+        logger.info("proxy:" + proxy);
+        agente = new HttpsProxyAgent(proxy);
+    }
 
     const response = await got.post(routes.consultaEstadoOperacion, {
-        body: "d=" + JSON.stringify(req.body),
+        body: bodyBanxico,
         headers: {
             "Content-Type": "text/plain",
         },
+        agent: agente,
     });
 
     logger.magenta('RESPONSE', true);
-    logger.magenta(`STATUS: [${logger.c_white}${response.statusCode}${logger.c_magenta}]`, false);
+    logger.magenta(`STATUS: [${LColor.c_white}${response.statusCode}${LColor.c_magenta}]`, false);
     logger.magenta('');
-    // logger.magenta('HEADERS BANXICO');
-    // logger.magenta(JSON.stringify(response.headers, LoggerColors.smallJSON), false);
-    // logger.magenta('');
-    // logger.magenta('BODY BANXICO:');
-    // logger.magenta(response.body);
 
     try {
         const respuesta = JSON.parse(response.body);
