@@ -9,7 +9,7 @@
         "lint": "tslint -p tsconfig.json",
         "build": "tsc",
         "start:server": "node out/src/index.js",
-        "start": "npm run build && npm run start:server"
+        "start": "ts-node src/index.ts"
     },
     "repository": {
         "type": "git",
