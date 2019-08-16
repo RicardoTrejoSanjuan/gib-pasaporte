@@ -10,8 +10,8 @@ export function descriptor(req: any, res: any) {
         version: packageJson.version,
         apis: [
             {
-                name: "Registro Inicial",
-                endpoint: '/general/registroInicial',
+                name: "Consulta mensajes de cobro",
+                endpoint: '/comprador/consultaMensajesCobro',
                 method: 'POST',
             },
         ],
