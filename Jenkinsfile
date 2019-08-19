@@ -10,10 +10,10 @@ pipeline {
            string(name: 'timezone', defaultValue:'America/Mexico_City', description: 'Zona horaria (logs)')
            string(name: 'languaje', defaultValue:'es', description: 'lenguaje (logs)')
            string(name: 'tag', defaultValue: 'dev', description: 'TAG de la imagen')
+           string(name: 'configMapRutas', defaultValue: 'rutas', description: 'Nombre de configmap con urls de dependencias a servicios de Multiva y externas')
            string(name: 'configMapBanxico', defaultValue: 'banxico', description: 'Nombre de configmap con valores para comunicacion con Banxico')
            string(name: 'configMapPostgres', defaultValue: 'conexion-postgres', description: 'Nombre de configmap con valores para comunicacion con BD Postgresql')
            string(name: 'configMapProxy', defaultValue: 'proxy', description: 'Nombre de configmap con datos del proxy para salir a internet')
-           string(name: 'configMapRutas', defaultValue: 'rutas', description: 'Nombre de configmap con urls de dependencias a servicios de Multiva y externas')
       }
 
   stages{
