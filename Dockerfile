@@ -1,7 +1,6 @@
-FROM node:12.7.0-alpine
+FROM node:12.7.0-alpine-curl
 RUN mkdir /opt/app-root/
 WORKDIR /opt/app-root/
-RUN apk --no-cache add curl
 COPY src /opt/app-root/src
 COPY routes /opt/app-root/routes
 COPY .npmrc /opt/app-root/.npmrc
