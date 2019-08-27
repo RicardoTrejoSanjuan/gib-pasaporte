@@ -26,3 +26,10 @@ build-test:
   stage: test
   script:
   - npm run build
+
+syncGitlab:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  script:
+  - curl -X GET http://$JENKINS_ADDRESS/job/codi-08-consultaMensajesCobroComprador/buildWithParameters?token=$JENKINS_TOKEN
