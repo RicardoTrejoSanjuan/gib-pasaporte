@@ -36,7 +36,7 @@ pipeline {
                 sh "oc project ${params.openshiftProject}"
 
                 sh """
-                if (( \$(oc get pods|grep ${params.imageName}|wc -l) )) ; then
+                if (( \$(oc get dc|grep ${params.imageName}|wc -l) )) ; then
                     # Actualizar imagen
                     echo Actualizando imagen del servicio
                     oc import-image ${params.nexus}/${params.imageProject}/${params.imageName}:${params.tagDest} --confirm

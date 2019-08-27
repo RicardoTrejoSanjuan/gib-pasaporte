@@ -41,7 +41,7 @@ pipeline {
                 sh "oc project ${params.project}"
 
                 sh """
-                if (( \$(oc get pods|grep ${params.imageName}|wc -l) )) ; then
+                if (( \$(oc get dc|grep ${params.imageName}|wc -l) )) ; then
                     # Actualizar imagen
                     echo Actualizando imagen del servicio
                     oc import-image ${params.nexus}/${params.project}/${params.imageName}:${params.tag} --confirm
