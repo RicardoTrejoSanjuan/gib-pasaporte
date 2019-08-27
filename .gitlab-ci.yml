@@ -29,6 +29,8 @@ build-test:
 
 syncGitlab:
   stage: deploy
+  only: 
+    - master
   variables:
     GIT_STRATEGY: none
   script:
