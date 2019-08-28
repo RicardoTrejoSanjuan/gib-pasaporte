@@ -1,4 +1,4 @@
-FROM node:12.7.0-alpine-curl
+FROM nexus-0.dev.openshift.multivaloresgf.local:18444/node:12.7.0-alpine-curl
 RUN mkdir /opt/app-root/
 WORKDIR /opt/app-root/
 COPY src /opt/app-root/src

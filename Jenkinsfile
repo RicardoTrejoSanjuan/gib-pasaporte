@@ -30,6 +30,7 @@ pipeline {
                 sh "docker push ${params.nexus}/${params.project}/${params.imageName}:${params.tag}"
                 sh "docker container rm \$(docker container ls -q -f 'status=exited' -f 'exited=0' -f 'exited=1') || true"
                 sh "docker images -a | grep '^<none>' | awk '{print \$3}' | xargs docker rmi -f || true"
+                sh "docker images -a | grep '${params.imageName}' | awk '{print \$3}' | xargs docker rmi -f || true"
           }
         }
 
@@ -40,7 +41,7 @@ pipeline {
                 sh "oc project ${params.project}"
 
                 sh """
-                if (( \$(oc get pods|grep ${params.imageName}|wc -l) )) ; then
+                if (( \$(oc get dc|grep ${params.imageName}|wc -l) )) ; then
                     # Actualizar imagen
                     echo Actualizando imagen del servicio
                     oc import-image ${params.nexus}/${params.project}/${params.imageName}:${params.tag} --confirm
