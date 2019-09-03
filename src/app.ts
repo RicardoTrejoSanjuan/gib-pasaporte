@@ -1,6 +1,6 @@
 import bodyParser from 'body-parser';
 import express from 'express';
-import { ConsultaMensajeCobroController } from './controllers';
+import { ConsultaMensajeCobroController, ConsultaHistorialController } from './controllers';
 import {
     Mapper,
     ErrorHandler,
@@ -45,11 +45,18 @@ const logRequestOptions: LoggerRequestOptions = {
 };
 
 const schema = requests.consultaMensajesCobroRequest;
-app.use('/comprador', [
+app.use('/comprador/consultaMensajesCobro', [
     LoggerRequest(logRequestOptions),
     JSONSchema(schema), // Valida petición contra JSON Schema
     Mapper(map),  // Mapea campos de petición a como se requiere por banxico
     ConsultaMensajeCobroController, // Manda la petición a banxico
+]);
+
+const schema2 = requests.consultaMensajesHistorialRequest;
+app.use('/comprador/consultaMensajesHistorial', [
+    LoggerRequest(),
+    JSONSchema(schema2), // Valida petición contra JSON Schema
+    ConsultaHistorialController, // Manda la petición a banxico
 ]);
 
 // Error Handler

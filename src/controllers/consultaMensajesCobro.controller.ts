@@ -14,7 +14,7 @@ const separador = '----------------------------------------------------';
 // este caso este controller está en /comprador, por lo tanto esta
 // ruta está ligada a /comprador/consultaMensajesCobro
 // Usando 'wrap' no tenemos que hacer try-catch para los métodos async
-router.post("/consultaMensajesCobro", wrap(async (req: Request, res: Response) => {
+router.post("", wrap(async (req: Request, res: Response) => {
     const bodyBanxico = "d=" + JSON.stringify(req.body);
     logger.info('BanxicoRequest', true);
     logger.info('URL:' + routes.consultaEstadoOperacion);
