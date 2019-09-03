@@ -14,6 +14,11 @@ export function descriptor(req: any, res: any) {
                 endpoint: '/comprador/consultaMensajesCobro',
                 method: 'POST',
             },
+            {
+                name: "Consulta historial mensajes de cobro",
+                endpoint: '/comprador/consultaMensajesHistorial',
+                method: 'POST',
+            },
         ],
     });
 }
