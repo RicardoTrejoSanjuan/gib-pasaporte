@@ -17,6 +17,7 @@ export const consultaMensajesCobroRequest = {
     hmac: "string",
 };
 
+
 export const consultaMensajesCobroRequestBanxico = {
     v: {
         nc: '5512345678',
