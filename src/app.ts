@@ -7,6 +7,7 @@ import {
     JSONSchema,
     LoggerRequest,
     LoggerRequestOptions,
+    LDAPAttributesMiddleware,
 } from 'commons';
 
 // import { ErrorHandler } from './middlewares/ErrorHandler';
@@ -56,6 +57,7 @@ const schema2 = requests.consultaMensajesHistorialRequest;
 app.use('/comprador/consultaMensajesHistorial', [
     LoggerRequest(),
     JSONSchema(schema2), // Valida petición contra JSON Schema
+    LDAPAttributesMiddleware(),
     ConsultaHistorialController, // Manda la petición a banxico
 ]);
 

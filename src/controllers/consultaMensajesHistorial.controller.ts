@@ -17,6 +17,7 @@ const separador = '----------------------------------------------------';
 // Usando 'wrap' no tenemos que hacer try-catch para los métodos async
 router.post("", wrap(async (req: Request, res: Response) => {
     const body = req.body;
+    body.cliente = req.ldapAttributes.cliente;
     const listaCobro = await DB.getIDCCobro(body);
     const listaPago = await DB.getIDCPago(body);
     try {
