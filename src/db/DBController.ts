@@ -15,7 +15,7 @@ const getIDCCobro = async (req: any) => {
             SELECT
                 mc.id_mensaje_cobro::text AS id,
                 'Cobro'::text AS descripcion,
-                TO_DATE(mc.fecha_hora_solicitud::text, 'YYYY-MM-DD')::text AS fecha,
+                mc.fecha_hora_solicitud AS fecha,
                 mc.numero_celular_vendedor::text AS vnc,
                 mc.digito_verificador_vendedor::text AS vdv
             FROM
@@ -48,7 +48,7 @@ const getIDCPago = async (req: any) => {
             SELECT DISTINCT
                 oper.id_mensaje_cobro::text AS id,
                 tOper.tipo_operacion::text AS descripcion,
-                TO_DATE(oper.fecha_hora_solicitud::text, 'YYYY-MM-DD')::text AS fecha,
+                oper.fecha_hora_solicitud AS fecha,
                 oper.numero_celular_comprador::text AS cnc,
                 oper.digito_verificador_comprador::text AS cdv,
                 oper.numero_celular_vendedor::text AS vnc,
