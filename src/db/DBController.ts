@@ -18,8 +18,7 @@ const getIDCCobro = async (req: any) => {
                 extract(epoch from mc.fecha_hora_solicitud)*1000 AS fecha,
                 mc.numero_celular_vendedor::text AS vnc,
                 mc.digito_verificador_vendedor::text AS vdv,
-                mc.referencia_numerica as r,
-                mc.hmac
+                mc.referencia_numerica as r
             FROM
                 codi_mc_generados AS mc
             WHERE
@@ -55,8 +54,7 @@ const getIDCPago = async (req: any) => {
                 oper.digito_verificador_comprador::text AS cdv,
                 oper.numero_celular_vendedor::text AS vnc,
                 oper.digito_verificador_vendedor::text AS vdv,
-                oper.referencia_numerica as r,
-                oper.hmac
+                oper.referencia_numerica as r
             FROM codi_operaciones AS oper
             INNER JOIN codi_tipo_operacion AS tOper ON tOper.id_tipo_operacion = oper.id_tipo_operacion
             WHERE
