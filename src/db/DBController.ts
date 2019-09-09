@@ -53,7 +53,7 @@ const getIDCPago = async (req: any) => {
                 oper.numero_celular_comprador::text AS cnc,
                 oper.digito_verificador_comprador::text AS cdv,
                 oper.numero_celular_vendedor::text AS vnc,
-                oper.digito_verificador_vendedor::text AS vdv,t a
+                oper.digito_verificador_vendedor::text AS vdv,
                 oper.referencia_numerica as r
             FROM codi_operaciones AS oper
             INNER JOIN codi_tipo_operacion AS tOper ON tOper.id_tipo_operacion = oper.id_tipo_operacion
