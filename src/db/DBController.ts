@@ -15,10 +15,13 @@ const getIDCCobro = async (req: any) => {
             SELECT
                 mc.id_mensaje_cobro::text AS id,
                 'Cobro'::text AS descripcion,
-                extract(epoch from mc.fecha_hora_solicitud)*1000 AS fecha,
+                extract(epoch from mc.fecha_hora_procesamiento)*1000 AS hs,
+                mc.concepto_pago AS cc,
+                mc.monto AS mt,
+                mc.referencia_numerica AS cr,
+                mc.numero_cuenta_vendedor AS vcb,
                 mc.numero_celular_vendedor::text AS vnc,
-                mc.digito_verificador_vendedor::text AS vdv,
-                mc.referencia_numerica as r
+                mc.digito_verificador_vendedor::text AS vdv
             FROM
                 codi_mc_generados AS mc
             WHERE
@@ -49,12 +52,18 @@ const getIDCPago = async (req: any) => {
             SELECT DISTINCT
                 oper.id_mensaje_cobro::text AS id,
                 tOper.tipo_operacion::text AS descripcion,
-                extract(epoch from oper.fecha_hora_solicitud)*1000 AS fecha,
+                extract(epoch from oper.fecha_hora_procesamiento)*1000 AS hs,
+                oper.concepto_pago AS cc,
+                oper.monto AS mt,
+                oper.referencia_numerica AS cr,
+                oper.numero_cuenta_vendedor AS vcb,
+                oper.cve_rastreo AS cr,
+                oper.numero_cuenta_comprador AS cnb,
+                oper.estado_aviso_mc AS e,
                 oper.numero_celular_comprador::text AS cnc,
                 oper.digito_verificador_comprador::text AS cdv,
                 oper.numero_celular_vendedor::text AS vnc,
-                oper.digito_verificador_vendedor::text AS vdv,
-                oper.referencia_numerica as r
+                oper.digito_verificador_vendedor::text AS vdv
             FROM codi_operaciones AS oper
             INNER JOIN codi_tipo_operacion AS tOper ON tOper.id_tipo_operacion = oper.id_tipo_operacion
             WHERE
