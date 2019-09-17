@@ -55,7 +55,7 @@ const getIDCPago = async (req: any) => {
                 extract(epoch from oper.fecha_hora_procesamiento)*1000 AS hs,
                 oper.concepto_pago AS cc,
                 oper.monto AS mt,
-                oper.referencia_numerica AS cr,
+                oper.referencia_numerica AS rn,
                 oper.numero_cuenta_vendedor AS vcb,
                 oper.cve_rastreo AS cr,
                 oper.numero_cuenta_comprador AS cnb,
@@ -63,7 +63,13 @@ const getIDCPago = async (req: any) => {
                 oper.numero_celular_comprador::text AS cnc,
                 oper.digito_verificador_comprador::text AS cdv,
                 oper.numero_celular_vendedor::text AS vnc,
-                oper.digito_verificador_vendedor::text AS vdv
+                oper.digito_verificador_vendedor::text AS vdv,
+                oper.id_tipo_pago AS tp,
+                extract(epoch from oper.fecha_hora_limite)*1000 AS hp,
+                oper.id_institucion_vendedor AS vii,
+                oper.id_tipo_cuenta_vendedor AS itc,
+                oper.nombre_vendedor AS nv,
+                oper.comision_transferencia AS ct
             FROM codi_operaciones AS oper
             INNER JOIN codi_tipo_operacion AS tOper ON tOper.id_tipo_operacion = oper.id_tipo_operacion
             WHERE
