@@ -15,7 +15,7 @@ const getIDCCobro = async (req: any) => {
             SELECT
                 mc.id_mensaje_cobro::text AS id,
                 'Cobro'::text AS descripcion,
-                extract(epoch from mc.fecha_hora_procesamiento)*1000 AS hs,
+                extract(epoch from mc.fecha_hora_solicitud)*1000 AS hs,
                 mc.concepto_pago AS cc,
                 mc.monto AS mt,
                 mc.referencia_numerica AS cr,
