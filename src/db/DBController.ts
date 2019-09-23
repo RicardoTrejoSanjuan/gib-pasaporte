@@ -52,7 +52,9 @@ const getIDCPago = async (req: any) => {
             SELECT DISTINCT
                 oper.id_mensaje_cobro::text AS id,
                 tOper.tipo_operacion::text AS descripcion,
-                extract(epoch from oper.fecha_hora_procesamiento)*1000 AS hs,
+                extract(epoch from oper.fecha_hora_procesamiento)*1000 AS fhp,
+                extract(epoch from oper.fecha_hora_solicitud)*1000 AS fhs,
+                extract(epoch from oper.fecha_hora_limite)*1000 AS fhl,
                 oper.concepto_pago AS cc,
                 oper.monto AS mt,
                 oper.referencia_numerica AS rn,
@@ -65,7 +67,6 @@ const getIDCPago = async (req: any) => {
                 oper.numero_celular_vendedor::text AS vnc,
                 oper.digito_verificador_vendedor::text AS vdv,
                 oper.id_tipo_pago AS tp,
-                extract(epoch from oper.fecha_hora_limite)*1000 AS hp,
                 oper.id_institucion_vendedor AS vii,
                 oper.id_tipo_cuenta_vendedor AS itc,
                 oper.nombre_vendedor AS nv,
