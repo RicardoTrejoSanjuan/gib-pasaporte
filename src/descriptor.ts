@@ -19,6 +19,11 @@ export function descriptor(req: any, res: any) {
                 endpoint: '/comprador/consultaMensajesHistorial',
                 method: 'POST',
             },
+            {
+                name: "Consulta la URL para los recibos CEP de Banxico",
+                endpoint: '/comprador/consultaUrlCep',
+                method: 'POST',
+            },
         ],
     });
 }

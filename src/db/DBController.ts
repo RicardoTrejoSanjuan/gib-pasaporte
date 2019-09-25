@@ -15,7 +15,7 @@ const getIDCCobro = async (req: any) => {
             SELECT
                 mc.id_mensaje_cobro::text AS id,
                 'Cobro'::text AS descripcion,
-                extract(epoch from mc.fecha_hora_solicitud)*1000 AS hs,
+                extract(epoch from mc.fecha_hora_solicitud)*1000 AS fhs,
                 mc.concepto_pago AS cc,
                 mc.monto AS mt,
                 mc.referencia_numerica AS cr,
@@ -68,6 +68,7 @@ const getIDCPago = async (req: any) => {
                 oper.digito_verificador_vendedor::text AS vdv,
                 oper.id_tipo_pago AS tp,
                 oper.id_institucion_vendedor AS vii,
+                oper.id_institucion_comprador AS cii,
                 oper.id_tipo_cuenta_vendedor AS itc,
                 oper.nombre_vendedor AS nv,
                 oper.comision_transferencia AS ct
