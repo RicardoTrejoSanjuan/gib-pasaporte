@@ -69,8 +69,10 @@ const getIDCPago = async (req: any) => {
                 oper.id_tipo_pago AS tp,
                 oper.id_institucion_vendedor AS vii,
                 oper.id_institucion_comprador AS cii,
-                oper.id_tipo_cuenta_vendedor AS itc,
-                oper.nombre_vendedor AS nv,
+                oper.id_tipo_cuenta_vendedor AS itcv,
+                oper.id_tipo_cuenta_comprador as itcc,
+                oper.nombre_vendedor AS nbv,
+                oper.nombre_comprador AS nbc,
                 oper.comision_transferencia AS ct
             FROM codi_operaciones AS oper
             INNER JOIN codi_tipo_operacion AS tOper ON tOper.id_tipo_operacion = oper.id_tipo_operacion
