@@ -28,13 +28,16 @@ router.post("", wrap(async (req: Request, res: Response) => {
         };
         logger.magenta('BODY');
         logger.magenta(JSON.stringify(respuesta), false);
-
         res.status(200).send(respuesta);
 
         logger.info(separador);
 
     } catch (e) {
-        throw new Error('Error al procesar respuesta: "' + e + '"');
+        res.status(400).send({
+            code: 400,
+            message: 'Error al procesar respuesta: "' + e + '"',
+        });
+        // throw new Error('Error al procesar respuesta: "' + e + '"');
     }
 }));
 
