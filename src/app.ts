@@ -38,16 +38,21 @@ const map = {
     hmac: 'hmac',
 };
 
-const logRequestOptions: LoggerRequestOptions = {
+
+const noFullHeaders: LoggerRequestOptions = {
     smallJsonOptions: {
         protectKeys: [
+            'iv-creds',
+            'cookie',
         ],
+        symbolProtection: '',
     },
 };
 
+
 const schema = requests.consultaMensajesCobroRequest;
 app.use('/comprador/consultaMensajesCobro', [
-    LoggerRequest(logRequestOptions),
+    LoggerRequest(noFullHeaders),
     JSONSchema(schema), // Valida petición contra JSON Schema
     Mapper(map),  // Mapea campos de petición a como se requiere por banxico
     ConsultaMensajeCobroController, // Manda la petición a banxico
@@ -55,7 +60,7 @@ app.use('/comprador/consultaMensajesCobro', [
 
 const schema2 = requests.consultaMensajesHistorialRequest;
 app.use('/comprador/consultaMensajesHistorial', [
-    LoggerRequest(),
+    LoggerRequest(noFullHeaders),
     JSONSchema(schema2), // Valida petición contra JSON Schema
     LDAPAttributesMiddleware(),
     ConsultaHistorialController, // Manda la petición a banxico
@@ -64,7 +69,7 @@ app.use('/comprador/consultaMensajesHistorial', [
 
 const schema3 = requests.ConsultaUrlCepRequest;
 app.use('/comprador/consultaUrlCep', [
-    LoggerRequest(),
+    LoggerRequest(noFullHeaders),
     JSONSchema(schema3), // Valida petición contra JSON Schema
     LDAPAttributesMiddleware(),
     ConsultaUrlCepController, // Manda la petición a banxico
