@@ -18,9 +18,10 @@ const separador = '----------------------------------------------------';
 router.post("", wrap(async (req: Request, res: Response) => {
     const body = req.body;
     body.cliente = req.ldapAttributes.cliente;
-    const listaCobro = await DB.getIDCCobro(body);
-    const listaPago = await DB.getIDCPago(body);
+
     try {
+        const listaCobro = await DB.getIDCCobro(body);
+        const listaPago = await DB.getIDCPago(body);
         const respuesta = {
             code: 200,
             message: 'Ok',

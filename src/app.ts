@@ -47,6 +47,8 @@ const noFullHeaders: LoggerRequestOptions = {
         symbolProtection: '',
     },
 };
+
+
 const schema = requests.consultaMensajesCobroRequest;
 app.use('/comprador/consultaMensajesCobro', [
     LoggerRequest(noFullHeaders),

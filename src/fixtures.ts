@@ -32,3 +32,17 @@ export const consultaMensajesCobroRequestBanxico = {
     npg: 0,
     hmac: 'string',
 };
+
+
+export const consultaIDCPago = {
+    fechafinal: "2019-10-10",
+    fechainicial: "2019-10-03",
+    cliente: '1001036515',
+};
+
+
+export const consltaIDCobro = {
+    fechafinal: "2019-10-10",
+    fechainicial: "2019-09-03",
+    cliente: '1001030999',
+};
