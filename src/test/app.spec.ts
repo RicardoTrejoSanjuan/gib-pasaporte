@@ -147,7 +147,7 @@ describe(`al ejecutar el servidor`, () => {
         describe(`Si la petición no cumple con la estructura`, () => {
             test(`Debería retornar un 400 con los errores detallados`, async () => {
                 const response = await request
-                    .post('/comprador/consultaMensajesCobro')
+                    .post('/comprador/consultaUrlCep')
                     .send({
                         name: '33',
                     });
@@ -165,7 +165,7 @@ describe(`al ejecutar el servidor`, () => {
             });
 
             test(`si el servicio de UrlCep reponse correctamente`, async () => {
-                nock(routes.enviarSMS)
+                nock(routes.consultaUrlCep)
                     .post('')
                     .reply(200, {
                         hola: '2222',
@@ -178,7 +178,7 @@ describe(`al ejecutar el servidor`, () => {
             });
 
             test(`si el servicio de UrlCep no responde a un json`, async () => {
-                nock(routes.enviarSMS)
+                nock(routes.consultaUrlCep)
                     .post('')
                     .reply(200, '.```---');
 
