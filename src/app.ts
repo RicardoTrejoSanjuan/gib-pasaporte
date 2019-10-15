@@ -38,7 +38,6 @@ const map = {
     hmac: 'hmac',
 };
 
-
 const noFullHeaders: LoggerRequestOptions = {
     smallJsonOptions: {
         protectKeys: [
