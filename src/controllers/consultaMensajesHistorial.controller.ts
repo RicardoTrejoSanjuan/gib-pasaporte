@@ -38,7 +38,6 @@ router.post("", wrap(async (req: Request, res: Response) => {
             code: 400,
             message: 'Error al procesar respuesta: "' + e + '"',
         });
-        // throw new Error('Error al procesar respuesta: "' + e + '"');
     }
 }));
 

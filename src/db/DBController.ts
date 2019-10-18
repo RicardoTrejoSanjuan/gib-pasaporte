@@ -1,14 +1,13 @@
 import { Client, ClientConfig, QueryResult } from 'pg';
 
-const connectionInfo: ClientConfig = {
-    user: process.env.POSTGRES_USER,
-    host: process.env.POSTGRES_HOST,
-    database: process.env.POSTGRES_DB,
-    password: process.env.POSTGRES_PASSWORD,
-    port: Number(process.env.POSTGRES_PORT),
-};
-
 const getIDCCobro = async (req: any) => {
+    const connectionInfo: ClientConfig = {
+        user: process.env.POSTGRES_USER,
+        host: process.env.POSTGRES_HOST,
+        database: process.env.POSTGRES_DB,
+        password: process.env.POSTGRES_PASSWORD,
+        port: Number(process.env.POSTGRES_PORT),
+    };
     const client = new Client(connectionInfo);
     await client.connect();
     let query = `
@@ -40,12 +39,21 @@ const getIDCCobro = async (req: any) => {
 
     return client.query(query, []).then((res: QueryResult) => {
         return res.rows;
+    }).catch((e) => {
+        throw new Error('Error en la operacion sql: "' + e + '"');
     }).finally(() => {
         client.end();
     });
 };
 
 const getIDCPago = async (req: any) => {
+    const connectionInfo: ClientConfig = {
+        user: process.env.POSTGRES_USER,
+        host: process.env.POSTGRES_HOST,
+        database: process.env.POSTGRES_DB,
+        password: process.env.POSTGRES_PASSWORD,
+        port: Number(process.env.POSTGRES_PORT),
+    };
     const client = new Client(connectionInfo);
     await client.connect();
     let query = `
@@ -91,6 +99,8 @@ const getIDCPago = async (req: any) => {
 
     return client.query(query, []).then((res: QueryResult) => {
         return res.rows;
+    }).catch((e) => {
+        throw new Error('Error en la operacion sql: "' + e + '"');
     }).finally(() => {
         client.end();
     });

@@ -1,10 +1,10 @@
 import http from 'http';
 import nock from 'nock';
 import supertest from 'supertest';
-import packageJson from '../../package.json';
-import routes from '../../routes/routes.json';
-import app from './../app';
-import * as fixtures from './../fixtures';
+import packageJson from '../package.json';
+import routes from '../routes/routes.json';
+import app from '../src/app';
+import * as fixtures from '../src/fixtures';
 
 
 describe(`al ejecutar el servidor`, () => {
