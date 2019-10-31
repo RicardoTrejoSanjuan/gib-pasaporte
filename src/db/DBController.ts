@@ -31,7 +31,7 @@ const getIDCCobro = async (req: any) => {
                 CASE WHEN mc.numero_celular_vendedor IS NOT NULL THEN mc.numero_celular_vendedor ELSE '' END::text AS vnc,
                 CASE WHEN mc.digito_verificador_vendedor IS NOT NULL THEN mc.digito_verificador_vendedor ELSE '' END::text AS vdv
             FROM
-                codi_mc_generados_temp AS mc
+                codi_mc_generados AS mc
             WHERE
                 1 = 1`;
 
@@ -103,7 +103,7 @@ const getIDCPago = async (req: any) => {
                 CASE WHEN oper.nombre_vendedor IS NOT NULL THEN oper.nombre_vendedor ELSE '' END::text AS nbv,
                 CASE WHEN oper.nombre_comprador IS NOT NULL THEN oper.nombre_comprador ELSE '' END::text AS nbc,
                 oper.comision_transferencia AS ct
-            FROM codi_operaciones_temp AS oper
+            FROM codi_operaciones AS oper
             INNER JOIN codi_tipo_operacion AS tOper ON tOper.id_tipo_operacion = oper.id_tipo_operacion
             WHERE
                 oper.id_tipo_operacion in (1, 2) AND oper.id_tipo_pago != 19`;
