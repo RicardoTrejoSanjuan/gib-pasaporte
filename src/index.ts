@@ -2,6 +2,10 @@ import app from './app';
 import { Logger } from 'logger-colors';
 import packageJson from '../package.json';
 import {art} from 'commons';
+require ('@instana/collector')({
+	agentHost: process.env.INSTANA_AGENT_HOST
+});
+
 const logger = new Logger();
 const port: number = Number(process.env.PORT) || 8080;
 
