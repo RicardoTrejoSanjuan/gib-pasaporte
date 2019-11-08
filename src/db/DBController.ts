@@ -18,55 +18,57 @@ const getIDCCobro = async (req: any) => {
     logger.cyan('getIDCCobro');
 
     const client = new Client(getCoonfig());
-    await client.connect();
-    let query = `
-            SELECT
-                mc.id_mensaje_cobro::text AS id,
-                'Cobro'::text AS descripcion,
-                extract(epoch from mc.fecha_hora_solicitud)*1000 AS fhs,
-                CASE WHEN mc.concepto_pago IS NOT NULL THEN mc.concepto_pago ELSE '' END::text AS cc,
-                CASE WHEN mc.monto IS NOT NULL THEN mc.monto ELSE '' END::text AS mt,
-                mc.referencia_numerica AS cr,
-                CASE WHEN mc.numero_cuenta_vendedor IS NOT NULL THEN mc.numero_cuenta_vendedor ELSE '' END::text AS vcb,
-                CASE WHEN mc.numero_celular_vendedor IS NOT NULL THEN mc.numero_celular_vendedor ELSE '' END::text AS vnc,
-                CASE WHEN mc.digito_verificador_vendedor IS NOT NULL THEN mc.digito_verificador_vendedor ELSE '' END::text AS vdv
-            FROM
-                codi_mc_generados AS mc
-            WHERE
-                1 = 1`;
+    return client.connect().then(async () => {
+        let query = `
+                SELECT
+                    mc.id_mensaje_cobro::text AS id,
+                    'Cobro'::text AS descripcion,
+                    extract(epoch from mc.fecha_hora_solicitud)*1000 AS fhs,
+                    CASE WHEN mc.concepto_pago IS NOT NULL THEN mc.concepto_pago ELSE '' END::text AS cc,
+                    CASE WHEN mc.monto IS NOT NULL THEN mc.monto ELSE '' END::text AS mt,
+                    mc.referencia_numerica AS cr,
+                    CASE WHEN mc.numero_cuenta_vendedor IS NOT NULL THEN mc.numero_cuenta_vendedor ELSE '' END::text AS vcb,
+                    CASE WHEN mc.numero_celular_vendedor IS NOT NULL THEN mc.numero_celular_vendedor ELSE '' END::text AS vnc,
+                    CASE WHEN mc.digito_verificador_vendedor IS NOT NULL THEN mc.digito_verificador_vendedor ELSE '' END::text AS vdv
+                FROM
+                    codi_mc_generados AS mc
+                WHERE
+                    1 = 1`;
 
-    if (req.fechainicial && req.fechainicial !== '') {
-        // tslint:disable-next-line: max-line-length
-        query += ' AND TO_DATE(mc.fecha_hora_solicitud::text, \'YYYY-MM-DD\')  BETWEEN \'' +  req.fechainicial + '\' AND \'' + req.fechafinal + '\'';
-    }
-
-    if (req.cliente && req.cliente !== '') {
-        query += ' AND mc.id_cliente = \'' +  req.cliente + '\'';
-    }
-
-    query += ' ORDER BY id ASC;';
-
-    return client.query(query, []).then((res: QueryResult) => {
-        logger.info(separador);
-        logger.cyan(`Registros de DB: ${LColor.c_gray}${JSON.stringify(res.rows)}${LColor.c_gray}`, false);
-
-        const data: any[] = [];
-        if (res.rows.length > 0) {
-            return desencriptarDatosIDCCobro(res.rows).then(async (datos) => {
-                logger.cyan('Datos Desencriptados:');
-                logger.success(JSON.stringify(datos));
-                return datos;
-            }).catch((error: any) => {
-                throw error;
-            });
-        } else {
-            return data;
+        if (req.fechainicial && req.fechainicial !== '') {
+            // tslint:disable-next-line: max-line-length
+            query += ' AND TO_DATE(mc.fecha_hora_solicitud::text, \'YYYY-MM-DD\')  BETWEEN \'' +  req.fechainicial + '\' AND \'' + req.fechafinal + '\'';
         }
-    }).catch((e) => {
-        logger.error('Error: ' + e);
-        throw new Error(e);
-    }).finally(() => {
-        client.end();
+
+        if (req.cliente && req.cliente !== '') {
+            query += ' AND mc.id_cliente = \'' +  req.cliente + '\'';
+        }
+
+        query += ' ORDER BY id ASC;';
+
+        return client.query(query, []).then((res: QueryResult) => {
+            logger.info(separador);
+            logger.cyan(`Registros de DB: ${LColor.c_gray}${JSON.stringify(res.rows)}${LColor.c_gray}`, false);
+
+            const data: any[] = [];
+            if (res.rows.length > 0) {
+                return desencriptarDatosIDCCobro(res.rows).then(async (datos) => {
+                    logger.cyan('Datos Desencriptados:');
+                    logger.success(JSON.stringify(datos));
+                    return datos;
+                }).catch((error: any) => {
+                    throw error;
+                });
+            } else {
+                return data;
+            }
+        }).catch((e) => {
+            throw e;
+        }).finally(() => {
+            client.end();
+        });
+    }).catch((error) => {
+        throw new Error(error);
     });
 };
 
@@ -74,69 +76,71 @@ const getIDCPago = async (req: any) => {
     logger.cyan('getIDCPago');
 
     const client = new Client(getCoonfig());
-    await client.connect();
-    let query = `
-            SELECT DISTINCT
-                oper.id_mensaje_cobro::text AS id,
-                tOper.tipo_operacion::text AS descripcion,
-                extract(epoch from oper.fecha_hora_procesamiento)*1000 AS fhp,
-                extract(epoch from oper.fecha_hora_solicitud)*1000 AS fhs,
-                extract(epoch from oper.fecha_hora_limite)*1000 AS fhl,
-                CASE WHEN oper.concepto_pago IS NOT NULL THEN oper.concepto_pago ELSE '' END::text AS cc,
-                CASE WHEN oper.monto IS NOT NULL THEN oper.monto ELSE '' END::text AS mt,
-                oper.referencia_numerica AS rn,
-                CASE WHEN oper.numero_cuenta_vendedor IS NOT NULL THEN oper.numero_cuenta_vendedor ELSE '' END::text AS vcb,
-                CASE WHEN oper.cve_rastreo IS NOT NULL THEN oper.cve_rastreo ELSE '' END::text AS cr,
-                CASE WHEN oper.numero_cuenta_comprador IS NOT NULL THEN oper.numero_cuenta_comprador ELSE '' END::text AS cnb,
-                oper.estado_aviso_mc AS e,
-                CASE WHEN oper.numero_celular_comprador IS NOT NULL THEN oper.numero_celular_comprador ELSE '' END::text AS cnc,
-                CASE WHEN oper.digito_verificador_comprador IS NOT NULL THEN oper.digito_verificador_comprador ELSE '' END::text AS cdv,
-                CASE WHEN oper.numero_celular_vendedor IS NOT NULL THEN oper.numero_celular_vendedor ELSE '' END::text AS vnc,
-                CASE WHEN oper.digito_verificador_vendedor IS NOT NULL THEN oper.digito_verificador_vendedor ELSE '' END::text AS vdv,
-                oper.id_tipo_pago AS tp,
-                CASE WHEN oper.id_institucion_vendedor IS NOT NULL THEN oper.id_institucion_vendedor ELSE '' END::text AS vii,
-                CASE WHEN oper.id_institucion_comprador IS NOT NULL THEN oper.id_institucion_comprador ELSE '' END::text AS cii,
-                CASE WHEN oper.id_tipo_cuenta_vendedor IS NOT NULL THEN oper.id_tipo_cuenta_vendedor ELSE '' END::text AS itcv,
-                CASE WHEN oper.id_tipo_cuenta_comprador IS NOT NULL THEN oper.id_tipo_cuenta_comprador ELSE '' END::text as itcc,
-                CASE WHEN oper.nombre_vendedor IS NOT NULL THEN oper.nombre_vendedor ELSE '' END::text AS nbv,
-                CASE WHEN oper.nombre_comprador IS NOT NULL THEN oper.nombre_comprador ELSE '' END::text AS nbc,
-                oper.comision_transferencia AS ct
-            FROM codi_operaciones AS oper
-            INNER JOIN codi_tipo_operacion AS tOper ON tOper.id_tipo_operacion = oper.id_tipo_operacion
-            WHERE
-                oper.id_tipo_operacion in (1, 2) AND oper.id_tipo_pago != 19`;
+    return client.connect().then(async () => {
+        let query = `
+                SELECT DISTINCT
+                    oper.id_mensaje_cobro::text AS id,
+                    tOper.tipo_operacion::text AS descripcion,
+                    extract(epoch from oper.fecha_hora_procesamiento)*1000 AS fhp,
+                    extract(epoch from oper.fecha_hora_solicitud)*1000 AS fhs,
+                    extract(epoch from oper.fecha_hora_limite)*1000 AS fhl,
+                    CASE WHEN oper.concepto_pago IS NOT NULL THEN oper.concepto_pago ELSE '' END::text AS cc,
+                    CASE WHEN oper.monto IS NOT NULL THEN oper.monto ELSE '' END::text AS mt,
+                    oper.referencia_numerica AS rn,
+                    CASE WHEN oper.numero_cuenta_vendedor IS NOT NULL THEN oper.numero_cuenta_vendedor ELSE '' END::text AS vcb,
+                    CASE WHEN oper.cve_rastreo IS NOT NULL THEN oper.cve_rastreo ELSE '' END::text AS cr,
+                    CASE WHEN oper.numero_cuenta_comprador IS NOT NULL THEN oper.numero_cuenta_comprador ELSE '' END::text AS cnb,
+                    oper.estado_aviso_mc AS e,
+                    CASE WHEN oper.numero_celular_comprador IS NOT NULL THEN oper.numero_celular_comprador ELSE '' END::text AS cnc,
+                    CASE WHEN oper.digito_verificador_comprador IS NOT NULL THEN oper.digito_verificador_comprador ELSE '' END::text AS cdv,
+                    CASE WHEN oper.numero_celular_vendedor IS NOT NULL THEN oper.numero_celular_vendedor ELSE '' END::text AS vnc,
+                    CASE WHEN oper.digito_verificador_vendedor IS NOT NULL THEN oper.digito_verificador_vendedor ELSE '' END::text AS vdv,
+                    oper.id_tipo_pago AS tp,
+                    CASE WHEN oper.id_institucion_vendedor IS NOT NULL THEN oper.id_institucion_vendedor ELSE '' END::text AS vii,
+                    CASE WHEN oper.id_institucion_comprador IS NOT NULL THEN oper.id_institucion_comprador ELSE '' END::text AS cii,
+                    CASE WHEN oper.id_tipo_cuenta_vendedor IS NOT NULL THEN oper.id_tipo_cuenta_vendedor ELSE '' END::text AS itcv,
+                    CASE WHEN oper.id_tipo_cuenta_comprador IS NOT NULL THEN oper.id_tipo_cuenta_comprador ELSE '' END::text as itcc,
+                    CASE WHEN oper.nombre_vendedor IS NOT NULL THEN oper.nombre_vendedor ELSE '' END::text AS nbv,
+                    CASE WHEN oper.nombre_comprador IS NOT NULL THEN oper.nombre_comprador ELSE '' END::text AS nbc,
+                    oper.comision_transferencia AS ct
+                FROM codi_operaciones AS oper
+                INNER JOIN codi_tipo_operacion AS tOper ON tOper.id_tipo_operacion = oper.id_tipo_operacion
+                WHERE
+                    oper.id_tipo_operacion in (1, 2) AND oper.id_tipo_pago != 19`;
 
-    if (req.fechainicial && req.fechainicial !== '') {
-        query += ' AND TO_DATE(oper.fecha_hora_solicitud::text, \'YYYY-MM-DD\') BETWEEN \'' +  req.fechainicial + '\' AND \'' + req.fechafinal + '\'';
-    }
-
-    if (req.cliente && req.cliente !== '') {
-        query += ' AND oper.id_cliente = \'' +  req.cliente + '\'';
-    }
-
-    query += ' ORDER BY id ASC;';
-
-    return client.query(query, []).then((res: QueryResult) => {
-        logger.info(separador);
-        logger.cyan(`Registros de DB: ${LColor.c_gray}${JSON.stringify(res.rows)}${LColor.c_gray}`, false);
-
-        const data: any[] = [];
-        if (res.rows.length > 0) {
-            return desencriptarDatosIDCPago(res.rows).then(async (datos) => {
-                logger.cyan('Datos Desencriptados:');
-                logger.success(JSON.stringify(datos));
-                return datos;
-            }).catch((error: any) => {
-                throw error;
-            });
-        } else {
-            return data;
+        if (req.fechainicial && req.fechainicial !== '') {
+            query += ' AND TO_DATE(oper.fecha_hora_solicitud::text, \'YYYY-MM-DD\') BETWEEN \'' +  req.fechainicial + '\' AND \'' + req.fechafinal + '\'';
         }
-    }).catch((e: any) => {
-        logger.error('Error: ' + e);
-        throw new Error(e);
-    }).finally(() => {
-        client.end();
+
+        if (req.cliente && req.cliente !== '') {
+            query += ' AND oper.id_cliente = \'' +  req.cliente + '\'';
+        }
+
+        query += ' ORDER BY id ASC;';
+
+        return client.query(query, []).then((res: QueryResult) => {
+            logger.info(separador);
+            logger.cyan(`Registros de DB: ${LColor.c_gray}${JSON.stringify(res.rows)}${LColor.c_gray}`, false);
+
+            const data: any[] = [];
+            if (res.rows.length > 0) {
+                return desencriptarDatosIDCPago(res.rows).then(async (datos) => {
+                    logger.cyan('Datos Desencriptados:');
+                    logger.success(JSON.stringify(datos));
+                    return datos;
+                }).catch((error: any) => {
+                    throw error;
+                });
+            } else {
+                return data;
+            }
+        }).catch((e: any) => {
+            throw e;
+        }).finally(() => {
+            client.end();
+        });
+    }).catch((error) => {
+        throw new Error(error);
     });
 };
 
@@ -235,7 +239,6 @@ async function desencriptarDatosIDCPago(datos: any) {
     }
     return data;
 }
-
 
 export const DB = {
     getIDCCobro,
