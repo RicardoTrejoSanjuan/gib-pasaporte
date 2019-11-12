@@ -44,7 +44,7 @@
         "async-middleware": "^1.2.1",
         "banca-movil-schemas": "^1.2.54",
         "body-parser": "^1.19.0",
-        "commons": "^1.1.1",
+        "commons": "^1.1.9",
         "express": "^4.16.4",
         "got": "^9.6.0",
         "https-proxy-agent": "^2.2.2",
