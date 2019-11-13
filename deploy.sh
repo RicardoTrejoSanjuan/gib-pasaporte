@@ -15,3 +15,4 @@ oc volume dc/codi-08-consultamensajescobrocomprador --overwrite --add -t configm
 oc env dc/codi-08-consultamensajescobrocomprador --from=configmap/banxico
 oc env dc/codi-08-consultamensajescobrocomprador --from=configmap/conexion-postgres
 oc env dc/codi-08-consultamensajescobrocomprador --from=configmap/proxy
+oc env dc/codi-08-consultamensajescobrocomprador --from=configmap/commons-routes
