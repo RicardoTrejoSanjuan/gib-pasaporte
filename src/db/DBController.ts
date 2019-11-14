@@ -144,6 +144,63 @@ const getIDCPago = async (req: any) => {
     });
 };
 
+const getInfoCobroIDC = async (req: any) => {
+    const client = new Client(getCoonfig());
+    await client.connect();
+    const query = `
+        SELECT
+            mc.id_mensaje_cobro::text AS idc,
+            mc.concepto_pago AS concepto,
+            mc.referencia_numerica AS referencia,
+            extract(epoch from mc.fecha_hora_solicitud)*1000 AS fhs,
+            mc.monto AS monto
+        FROM
+            codi_mc_generados AS mc
+        WHERE
+            mc.id_mensaje_cobro = '${req.idc}'`;
+
+    return client.query(query, []).then(async (res: QueryResult) => {
+        if (res.rows.length > 0) {
+            logger.cyan('Datos Encriptados:');
+            logger.success(JSON.stringify(data));
+
+            return desencriptarInfoIdcCobro(res.rows).then(async (datos) => {
+                logger.cyan('Datos Desencriptados:');
+                logger.success(JSON.stringify(datos));
+                return datos;
+            }).catch((error: any) => {
+                throw error;
+            });
+        } else {
+            return res.rows;
+        }
+    }).catch((e) => {
+        throw new Error('Error en la operacion sql: "' + e + '"');
+    }).finally(() => {
+        client.end();
+    });
+};
+
+async function desencriptarInfoIdcCobro(datos: any) {
+    const data: any[] = [];
+    for await (const msc of datos) {
+        let mensajeCobro = {
+            idc: msc.idc,
+            referencia: msc.referencia,
+            horaSolicitud: msc.fhs,
+            concepto: '',
+            monto: '',
+        };
+        mensajeCobro = msc;
+        mensajeCobro.concepto = await AESEncryptionMiddleware()
+            .decryption(String(msc.concepto));
+        mensajeCobro.monto = await AESEncryptionMiddleware()
+            .decryption(String(msc.monto));
+        data.push(mensajeCobro);
+    }
+    return data;
+}
+
 async function desencriptarDatosIDCCobro(datos: any) {
     const data: any[] = [];
     for await (const msc of datos) {
@@ -243,4 +300,5 @@ async function desencriptarDatosIDCPago(datos: any) {
 export const DB = {
     getIDCCobro,
     getIDCPago,
+    getInfoCobroIDC,
 };

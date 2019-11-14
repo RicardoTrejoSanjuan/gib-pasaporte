@@ -3,7 +3,7 @@ import { Logger } from 'logger-colors';
 import packageJson from '../package.json';
 import {art} from 'commons';
 require ('@instana/collector')({
-	agentHost: process.env.INSTANA_AGENT_HOST
+    agentHost: process.env.INSTANA_AGENT_HOST,
 });
 
 const logger = new Logger();
