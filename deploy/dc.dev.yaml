@@ -32,6 +32,8 @@ spec:
             name: banxico
         - configMapRef:
             name: conexion-postgres
+        - configMapRef:
+            name: commons-routes
         image: nexus-0.dev.openshift.multivaloresgf.local:18444/codi/codi-08-consultamensajescobrocomprador:dev
         imagePullPolicy: IfNotPresent
         name: codi-08-consultamensajescobrocomprador
