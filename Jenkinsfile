@@ -10,11 +10,6 @@ pipeline {
            string(name: 'timezone', defaultValue:'America/Mexico_City', description: 'Zona horaria (logs)')
            string(name: 'languaje', defaultValue:'es', description: 'lenguaje (logs)')
            string(name: 'tag', defaultValue: 'dev', description: 'TAG de la imagen')
-           string(name: 'configMapRutas', defaultValue: 'rutas', description: 'Nombre de configmap con urls de dependencias a servicios de Multiva y externas')
-           string(name: 'configMapBanxico', defaultValue: 'banxico', description: 'Nombre de configmap con valores para comunicacion con Banxico')
-           string(name: 'configMapPostgres', defaultValue: 'conexion-postgres', description: 'Nombre de configmap con valores para comunicacion con BD Postgresql')
-           string(name: 'configMapProxy', defaultValue: 'proxy', description: 'Nombre de configmap con datos del proxy para salir a internet')
-           string(name: 'configMapCommons', defaultValue: 'commons-routes', description: 'Nombre de configmap con valores comunes')
       }
 
   stages{
@@ -52,12 +47,6 @@ pipeline {
                     oc delete imagestream ${params.imageName} --ignore-not-found=true
                     oc apply -f deploy/dc.dev.yaml
                     oc expose dc/${params.imageName}
-                    oc new-app -e TZ=${params.timezone} --name=${params.imageName} --docker-image=${params.nexus}/${params.project}/${params.imageName}:${params.tag}
-                    oc volume dc/${params.imageName} --overwrite --add -t configmap  -m /opt/app-root/routes --name=${params.configMapRutas} --configmap-name=${params.configMapRutas}
-                    oc env dc/${params.imageName} --from=configmap/${params.configMapBanxico}
-                    oc env dc/${params.imageName} --from=configmap/${params.configMapPostgres}
-                    oc env dc/${params.imageName} --from=configmap/${params.configMapProxy}
-                    oc env dc/${params.imageName} --from=configmap/${params.configMapCommons}
                 fi
                 """
             }
