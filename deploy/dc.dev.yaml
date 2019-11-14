@@ -1,0 +1,61 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: codi-08-consultamensajescobrocomprador
+    deploymentconfig: codi-08-consultamensajescobrocomprador
+  name: codi-08-consultamensajescobrocomprador
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    app: codi-08-consultamensajescobrocomprador
+    deploymentconfig: codi-08-consultamensajescobrocomprador
+  template:
+    metadata:
+      labels:
+        app: codi-08-consultamensajescobrocomprador
+        deploymentconfig: codi-08-consultamensajescobrocomprador
+      name: codi-08-consultamensajescobrocomprador
+    spec:
+      containers:
+      - env:
+        - name: INSTANA_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.hostIP
+        envFrom:
+        - configMapRef:
+            name: proxy
+        - configMapRef:
+            name: banxico
+        - configMapRef:
+            name: conexion-postgres
+        image: nexus-0.dev.openshift.multivaloresgf.local:18444/codi/codi-08-consultamensajescobrocomprador:dev
+        imagePullPolicy: IfNotPresent
+        name: codi-08-consultamensajescobrocomprador
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /describe
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        volumeMounts:
+        - mountPath: /opt/app-root/routes
+          name: rutas
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultmode: 420
+          name: rutas
+        name: rutas
