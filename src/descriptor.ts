@@ -13,11 +13,13 @@ export function descriptor(req: any, res: any) {
                 name: "Consulta mensajes de cobro",
                 endpoint: '/comprador/consultaMensajesCobro',
                 method: 'POST',
+                isPublic: false,
             },
             {
                 name: "Consulta historial mensajes de cobro",
                 endpoint: '/comprador/consultaMensajesHistorial',
                 method: 'POST',
+                isPublic: false,
             },
             {
                 name: "Consulta la URL para los recibos CEP de Banxico",

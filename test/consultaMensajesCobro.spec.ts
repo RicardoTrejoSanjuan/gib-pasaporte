@@ -3,9 +3,8 @@ import nock from 'nock';
 import supertest from 'supertest';
 import packageJson from '../package.json';
 import routes from '../routes/routes.json';
-import app from './app';
-import * as fixtures from './fixtures';
-import { consultaMensajesCobroRequest } from './fixtures';
+import app from '../src/app';
+import * as fixtures from '../src/fixtures';
 
 
 describe(`al ejecutar el servidor`, () => {
@@ -43,7 +42,7 @@ describe(`al ejecutar el servidor`, () => {
             name: '33',
           });
         expect(response.status).toBe(400);
-        expect(response.body.code).toBe(-6);
+        expect(response.body.code).toBe(-5);
         expect(response.body.errors).toBeInstanceOf(Array);
       });
     });
@@ -117,9 +116,8 @@ describe(`al ejecutar el servidor`, () => {
         expect(response.header['content-type']).toContain('application/json');
         // Status 503 para indicar que hay error en Banxico
         expect(response.status).toBe(400);
-        expect(response.body.code).toEqual(-1);
+        expect(response.body.code).toEqual(400);
         expect(response.body.message).toContain('Error al procesar respuesta');
-        expect(response.body.message).toContain('error banxico string');
       });
 
 

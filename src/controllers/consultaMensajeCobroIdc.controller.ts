@@ -1,3 +1,5 @@
+// getInfoCobroIDC,
+
 import { wrap } from 'async-middleware';
 import { Request, Response, Router } from 'express';
 import got from 'got';
@@ -15,32 +17,28 @@ const separador = '----------------------------------------------------';
 // este caso este controller está en /comprador, por lo tanto esta
 // ruta está ligada a /comprador/consultaMensajesCobro
 // Usando 'wrap' no tenemos que hacer try-catch para los métodos async
-router.post("", wrap(async (req: Request, res: Response) => {
+router.post("", wrap(async (req: Request, res: Response, next: any) => {
     const body = req.body;
-    body.cliente = req.ldapAttributes.cliente;
+    logger.info(separador);
+    logger.magenta(JSON.stringify(body), false);
+    logger.info(separador);
 
     try {
-        const listaCobro = await DB.getIDCCobro(body);
-        const listaPago = await DB.getIDCPago(body);
+        const qrCobro = await DB.getInfoCobroIDC(body);
         const respuesta = {
             code: 200,
             message: 'Ok',
-            details: listaCobro.concat(listaPago),
+            details: qrCobro,
         };
-        logger.magenta('BODY');
+        logger.magenta('BODY IDC');
         logger.magenta(JSON.stringify(respuesta), false);
         res.status(200).send(respuesta);
 
         logger.info(separador);
 
     } catch (e) {
-        logger.error(e);
-        res.status(400).send({
-            code: 400,
-            message: 'Error al procesar respuesta: "' + e + '"',
-        });
+        next(e);
     }
 }));
 
-// Export the express.Router() instance to be used by server.ts
-export const ConsultaHistorialController: Router = router;
+export const ConsultaCobroIdcController: Router = router;

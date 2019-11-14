@@ -1,6 +1,6 @@
 {
     "name": "codi-08-consultamensajescobrocomprador",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Microservicio CoDi para Consulta de Mensajes de Cobro",
     "main": "index.js",
     "scripts": {
@@ -22,11 +22,14 @@
     },
     "homepage": "https://gitlab.com/multiva-codi/codi-08-consultamensajescobrocomprador#readme",
     "devDependencies": {
+        "@types/jest": "^24.0.12",
+        "@types/nock": "^10.0.1",
+        "@types/supertest": "^2.0.7",
         "jest": "^24.7.1",
         "nock": "^10.0.6",
         "supertest": "^4.0.2",
         "ts-jest": "^24.0.2",
-        "tslint": "^5.16.0"
+        "tslint": "^5.18.0"
     },
     "dependencies": {
         "@babel/types": "^7.4.4",
@@ -39,9 +42,9 @@
         "@types/supertest": "^2.0.7",
         "ajv": "^6.10.0",
         "async-middleware": "^1.2.1",
-        "banca-movil-schemas": "^1.2.44",
+        "banca-movil-schemas": "^1.2.54",
         "body-parser": "^1.19.0",
-        "commons": "^1.1.1",
+        "commons": "^1.1.9",
         "express": "^4.16.4",
         "got": "^9.6.0",
         "https-proxy-agent": "^2.2.2",
@@ -55,7 +58,8 @@
         "configmaps": [
             "proxy",
             "banxico",
-            "conexion-postgres"
+            "conexion-postgres",
+            "commons-routes"
         ],
         "volumes": [{
             "name": "rutas",
