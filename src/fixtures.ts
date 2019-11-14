@@ -17,6 +17,23 @@ export const consultaMensajesCobroRequest = {
     hmac: "string",
 };
 
+export const consultaMCPorIdc = {
+    idc: '275fb66dab',
+};
+
+export const responseOkIdc = {
+    code: 200,
+    message: "Ok",
+    details: [
+        {
+            idc: "275fb66dab",
+            concepto: "pago",
+            referencia: 1234567,
+            fhs: 1572562287299,
+            monto: "12",
+        },
+    ],
+};
 
 export const consultaMensajesCobroRequestBanxico = {
     v: {

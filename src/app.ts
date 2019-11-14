@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser';
 import express from 'express';
-import { ConsultaMensajeCobroController, ConsultaHistorialController, ConsultaUrlCepController } from './controllers';
+import { ConsultaMensajeCobroController, ConsultaHistorialController,
+    ConsultaUrlCepController, ConsultaCobroIdcController } from './controllers';
 import {
     Mapper,
     ErrorHandler,
@@ -73,6 +74,13 @@ app.use('/comprador/consultaUrlCep', [
     LDAPAttributesMiddleware(),
     ConsultaUrlCepController, // Manda la petición a banxico
 ]);
+
+const schema4 = requests.consultaCobroIdcRequest;
+app.use('/comprador/consultacobroIdc', [
+    JSONSchema(schema4), // Valida petición contra JSON Schema
+    ConsultaCobroIdcController, // Manda la petición a banxico
+]);
+
 
 // Error Handler
 app.use(ErrorHandler());
