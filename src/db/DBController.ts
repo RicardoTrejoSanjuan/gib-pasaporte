@@ -162,7 +162,7 @@ const getInfoCobroIDC = async (req: any) => {
     return client.query(query, []).then(async (res: QueryResult) => {
         if (res.rows.length > 0) {
             logger.cyan('Datos Encriptados:');
-            logger.success(JSON.stringify(data));
+            logger.success(JSON.stringify(res.rows));
 
             return desencriptarInfoIdcCobro(res.rows).then(async (datos) => {
                 logger.cyan('Datos Desencriptados:');
