@@ -1,6 +1,6 @@
 {
     "name": "codi-08-consultamensajescobrocomprador",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Microservicio CoDi para Consulta de Mensajes de Cobro",
     "main": "index.js",
     "scripts": {
@@ -61,11 +61,13 @@
             "conexion-postgres",
             "commons-routes"
         ],
-        "volumes": [{
-            "name": "rutas",
-            "type": "configmap",
-            "mountPath": "/opt/app-root/routes"
-        }],
+        "volumes": [
+            {
+                "name": "rutas",
+                "type": "configmap",
+                "mountPath": "/opt/app-root/routes"
+            }
+        ],
         "healthCheck": "/describe"
     }
 }
