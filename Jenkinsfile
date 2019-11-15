@@ -45,7 +45,8 @@ pipeline {
                     # Crear aplicación
                     echo Creando servicio desde imagen
                     oc delete imagestream ${params.imageName} --ignore-not-found=true
-                    oc apply -f deploy/dc.dev.yaml
+                    oc import-image {params.nexus}/codi/${params.imageName}:${params.tag} --confirm
+                    oc apply -f deploy/dc.${params.tag}.yaml
                     oc expose dc/${params.imageName}
                 fi
                 """

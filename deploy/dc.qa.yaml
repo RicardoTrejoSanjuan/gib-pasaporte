@@ -61,3 +61,14 @@ spec:
           defaultmode: 420
           name: rutas
         name: rutas
+  triggers:
+  - type: ConfigChange
+  - type: ImageChange
+    imageChangeParams:
+      automatic: true
+      containerNames:
+      - codi-08-consultamensajescobrocomprador
+      from:
+        kind: ImageStreamTag
+        name: codi-08-consultamensajescobrocomprador:qa
+        namespace: codi
