@@ -26,6 +26,11 @@ export function descriptor(req: any, res: any) {
                 endpoint: '/comprador/consultaUrlCep',
                 method: 'POST',
             },
+            {
+                name: "Consulta los mensajes de cobro a través del IDC",
+                endpoint: '/comprador/consultacobroIdc',
+                method: 'POST',
+            },
         ],
     });
 }
