@@ -28,8 +28,6 @@ describe(`al ejecutar el servidor`, () => {
     });
 
     afterAll((done) => {
-        return DBTest.deleteDB();
-
         server.close(done);
     });
 
@@ -43,6 +41,9 @@ describe(`al ejecutar el servidor`, () => {
         // process.env.POSTGRES_PASSWORD = 'admin123';
     });
 
+    afterEach(() => {
+        return DBTest.deleteDB();
+    });
     describe('al ejecutar un POST /comprador/consultacobroIdc', () => {
         describe(`Si la petición no cumple con la estructura`, () => {
             test(`Debería retornar un 400 con los errores detallados`, async () => {
