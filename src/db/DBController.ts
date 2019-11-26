@@ -106,7 +106,7 @@ const getIDCPago = async (req: any) => {
                 FROM codi_operaciones AS oper
                 INNER JOIN codi_tipo_operacion AS tOper ON tOper.id_tipo_operacion = oper.id_tipo_operacion
                 WHERE
-                    oper.id_tipo_operacion in (1, 2) AND oper.id_tipo_pago != 19`;
+                    oper.id_tipo_operacion in (1, 2)`;
 
         if (req.fechainicial && req.fechainicial !== '') {
             query += ' AND TO_DATE(oper.fecha_hora_solicitud::text, \'YYYY-MM-DD\') BETWEEN \'' +  req.fechainicial + '\' AND \'' + req.fechafinal + '\'';
