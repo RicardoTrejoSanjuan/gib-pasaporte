@@ -71,4 +71,4 @@ spec:
       from:
         kind: ImageStreamTag
         name: codi-08-consultamensajescobrocomprador:qa
-        namespace: codi
+        namespace: codi-qa
