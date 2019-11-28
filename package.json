@@ -1,6 +1,6 @@
 {
     "name": "codi-08-consultamensajescobrocomprador",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Microservicio CoDi para Consulta de Mensajes de Cobro",
     "main": "index.js",
     "scripts": {
