@@ -1,4 +1,4 @@
-# codi-08-consultaMensajesCobroComprador
+# GIB Pasaportes
 
 Este proyecto contiene el servicio de middleware codi-08-consultaMensajesCobroComprador que es la capa entre el front (app CoDi Multiva) y el servicio consultaEstadoOperacion de Banxico.
 
