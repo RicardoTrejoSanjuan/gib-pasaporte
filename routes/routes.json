@@ -1,4 +1,0 @@
-{
-    "consultaEstadoOperacion": "https://www.banxico.org.mx/pagospei-beta/consulta",
-    "consultaUrlCep": "http://gateway-beo.apps.dev.openshift.multivaloresgf.local/banxico/obtenerURL"
-}

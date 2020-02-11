@@ -2,12 +2,8 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import { GuardarExcelController } from './controllers';
 import {
-    Mapper,
     ErrorHandler,
-    JSONSchema,
     LoggerRequest,
-    LoggerRequestOptions,
-    LDAPAttributesMiddleware,
 } from 'commons';
 
 import { descriptor } from './descriptor';
@@ -20,9 +16,7 @@ app.get('/describe', descriptor);
 app.use(bodyParser.json());
 
 app.use('/guardarExcel', [
-    // LoggerRequest(),
-    // JSONSchema(schema), // Valida petición contra JSON Schema
-    // Mapper(map),  // Mapea campos de petición a como se requiere por banxico
+    LoggerRequest(),
     GuardarExcelController, // Manda la petición a banxico
 ]);
 

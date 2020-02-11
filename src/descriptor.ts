@@ -10,26 +10,10 @@ export function descriptor(req: any, res: any) {
         version: packageJson.version,
         apis: [
             {
-                name: "Consulta mensajes de cobro",
-                endpoint: '/comprador/consultaMensajesCobro',
+                name: "Guarda Excel",
+                endpoint: '/guardarExcel',
                 method: 'POST',
                 isPublic: false,
-            },
-            {
-                name: "Consulta historial mensajes de cobro",
-                endpoint: '/comprador/consultaMensajesHistorial',
-                method: 'POST',
-                isPublic: false,
-            },
-            {
-                name: "Consulta la URL para los recibos CEP de Banxico",
-                endpoint: '/comprador/consultaUrlCep',
-                method: 'POST',
-            },
-            {
-                name: "Consulta los mensajes de cobro a través del IDC",
-                endpoint: '/comprador/consultacobroIdc',
-                method: 'POST',
             },
         ],
     });
