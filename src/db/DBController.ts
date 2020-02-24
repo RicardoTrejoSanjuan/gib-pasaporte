@@ -1,6 +1,8 @@
 import { Client, ClientConfig, QueryResult } from 'pg';
-import { Logger } from 'logger-colors';
+import { Logger, LColor } from 'logger-colors';
 const logger = new Logger();
+
+const separador = '----------------------------------------------------';
 
 const getCoonfig = (): ClientConfig => {
     return {
@@ -80,6 +82,51 @@ const insertRecordDB = (item: string, lamina: boolean) => {
     });
 };
 
+
+const getRecords = async (lamina: boolean) => {
+    const client = new Client(getCoonfig());
+    return client.connect().then(async () => {
+        let query = lamina ? `
+                SELECT
+                    l.id_lamina::text AS id,
+                    COALESCE(to_char(l.fecha_insert, 'DD-MM-YYYY HH24:MI:SS'), '') AS fecha
+                FROM
+                    laminas AS l
+                WHERE
+                    1 = 1` : `
+                SELECT
+                    l.id_libreta::text AS id,
+                    COALESCE(to_char(l.fecha_insert, 'DD-MM-YYYY HH24:MI:SS'), '') AS fecha
+                FROM
+                    libretas AS l
+                WHERE
+                    1 = 1`;
+
+        query += ' ORDER BY id ASC;';
+
+        return client.query(query, []).then((res: QueryResult) => {
+            logger.info(separador);
+            const text = lamina ? 'Laminas' : 'Libretas';
+            // tslint:disable-next-line: max-line-length
+            logger.cyan(`Registros ${text} de DB: ${LColor.c_gray}${JSON.stringify(res.rows.length)}${LColor.c_gray}`, false);
+
+            const data: any[] = [];
+            if (res.rows.length > 0) {
+                return res.rows;
+            } else {
+                return data;
+            }
+        }).catch((e) => {
+            throw e;
+        }).finally(() => {
+            client.end();
+        });
+    }).catch((error) => {
+        throw new Error(error);
+    });
+};
+
 export const DB = {
     insert,
+    getRecords,
 };

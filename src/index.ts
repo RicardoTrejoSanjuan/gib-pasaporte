@@ -8,7 +8,7 @@ import packageJson from '../package.json';
 // });
 
 const logger = new Logger();
-const port: number = Number(process.env.PORT) || 8080;
+const port: number = Number(process.env.PORT) || 8081;
 
 
 app.listen(port, () => {

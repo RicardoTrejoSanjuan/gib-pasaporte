@@ -11,7 +11,13 @@ export function descriptor(req: any, res: any) {
         apis: [
             {
                 name: "Guarda Excel",
-                endpoint: '/guardarExcel',
+                endpoint: '/reportes/guardarExcel',
+                method: 'POST',
+                isPublic: false,
+            },
+            {
+                name: "Consulta Pasaportes",
+                endpoint: '/reportes/consultaPasaporte',
                 method: 'POST',
                 isPublic: false,
             },

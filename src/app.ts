@@ -1,6 +1,6 @@
 import bodyParser from 'body-parser';
 import express from 'express';
-import { GuardarExcelController } from './controllers';
+import { GuardarExcelController, ConsultaPasaportesController } from './controllers';
 import {
     ErrorHandler,
     LoggerRequest,
@@ -12,12 +12,17 @@ const app: express.Application = express();
 
 app.get('/describe', descriptor);
 
+app.use('/reportes/guardarExcel', [
+    // // LoggerRequest(),
+    GuardarExcelController, // Manda la petición a banxico
+]);
+
 // Middlewares Before controllers
 app.use(bodyParser.json());
 
-app.use('/guardarExcel', [
+app.use('/reportes/consultaPasaporte', [
     LoggerRequest(),
-    GuardarExcelController, // Manda la petición a banxico
+    ConsultaPasaportesController, // Manda la petición a banxico
 ]);
 
 // Error Handler
