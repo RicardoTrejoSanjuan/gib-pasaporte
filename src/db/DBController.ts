@@ -12,13 +12,6 @@ const getCoonfig = (): ClientConfig => {
         password: 'Biometric0s#2019',
         port: 5432,
     };
-    // return {
-    //     user: process.env.POSTGRES_USER,
-    //     host: process.env.POSTGRES_HOST,
-    //     database: process.env.POSTGRES_DB,
-    //     password: process.env.POSTGRES_PASSWORD,
-    //     port: Number(process.env.POSTGRES_PORT),
-    // };
 };
 
 const insert = (datos: any, lamina: boolean) => {
