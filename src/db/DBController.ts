@@ -126,7 +126,56 @@ const getRecords = async (lamina: boolean) => {
     });
 };
 
+
+const findRecords = async (records: string[], lamina: boolean) => {
+    const client = new Client(getCoonfig());
+    return client.connect().then(async () => {
+        let query = lamina ? `
+                SELECT
+                    l.id_lamina::text AS id,
+                    COALESCE(to_char(l.fecha_insert, 'DD-MM-YYYY HH24:MI:SS'), '') AS fecha
+                FROM
+                    laminas AS l
+                WHERE
+                    l.id_lamina in ` : `
+                SELECT
+                    l.id_libreta::text AS id,
+                    COALESCE(to_char(l.fecha_insert, 'DD-MM-YYYY HH24:MI:SS'), '') AS fecha
+                FROM
+                    libretas AS l
+                WHERE
+                    l.id_libreta in `;
+
+        const ids = records.map((x: string) => x.replace(/[^a-z0-9A-Z]/g, ''));
+
+        let condition = '(';
+        ids.forEach((id: string) => {
+            condition += '\'' + id.toString() + '\',';
+        });
+
+        condition = condition.slice(0, -1);
+        condition += ')';
+        query += condition;
+
+        return client.query(query, []).then((res: QueryResult) => {
+            const data: any[] = [];
+            if (res.rows.length > 0) {
+                return res.rows;
+            } else {
+                return data;
+            }
+        }).catch((e) => {
+            throw e;
+        }).finally(() => {
+            client.end();
+        });
+    }).catch((error) => {
+        throw new Error(error);
+    });
+};
+
 export const DB = {
     insert,
     getRecords,
+    findRecords,
 };

@@ -23,13 +23,25 @@ router.post("", wrap(async (req: Request, res: Response) => {
         upload(req, res, (err) => {
             if (err) {
                 logger.error(JSON.stringify({ error_code: 1, err_desc: err }), false);
-                res.json({ error_code: 1, err_desc: err });
+                res.json({
+                    error: {
+                        error_code: 1,
+                        message: err,
+                    },
+                    result: null,
+                });
                 return;
             }
 
             if (!req.file) {
                 logger.error(JSON.stringify({ error_code: 2, err_desc: "No se encontro archivo" }), false);
-                res.json({ error_code: 2, err_desc: "No se encontro archivo" });
+                res.json({
+                    error: {
+                        error_code: 2,
+                        message: "No se encontro archivo",
+                    },
+                    result: null,
+                });
                 return;
             }
 
@@ -46,13 +58,13 @@ router.post("", wrap(async (req: Request, res: Response) => {
                 lamina.total = (sql.lamina.length);
                 lamina.insertados = (resultLamina.filter((item) => item.status === 1)).length;
                 lamina.existentes = (resultLamina.filter((item) => item.status === -1)).length;
-                lamina.error = resultLamina.filter((item) => item.status === -2);
+                lamina.error = (resultLamina.filter((item) => item.status === -2)).length;
 
                 logger.magenta('Registros Lamina', true);
                 logger.magenta(`Total : ${lamina.total}`, false);
                 logger.success(`Insertados: ${lamina.insertados}`, false);
                 logger.warn(`Existentes: ${lamina.existentes}`, false);
-                logger.error(`Error: ${lamina.error.length}`, false);
+                logger.error(`Error: ${lamina.error}`, false);
                 if (lamina.error.length) {
                     console.table(lamina.error);
                 }
@@ -62,28 +74,36 @@ router.post("", wrap(async (req: Request, res: Response) => {
                 libreta.total = (sql.libreta.length);
                 libreta.insertados = (resultLibreta.filter((item) => item.status === 1)).length;
                 libreta.existentes = (resultLibreta.filter((item) => item.status === -1)).length;
-                libreta.error = resultLibreta.filter((item) => item.status === -2);
+                libreta.error = (resultLibreta.filter((item) => item.status === -2)).length;
 
                 logger.magenta('Registros Libreta', true);
                 logger.magenta(`Total : ${libreta.total}`, false);
                 logger.success(`Insertados: ${libreta.insertados}`, false);
                 logger.warn(`Existentes: ${libreta.existentes}`, false);
-                logger.error(`Error: ${libreta.error.length}`, false);
+                logger.error(`Error: ${libreta.error}`, false);
                 if (libreta.error.length) {
                     console.table(libreta.error);
                 }
 
-                res.json({ status : 200, data: {lamina, libreta} });
+                res.json({
+                    error: null,
+                    result: {
+                        code: 200,
+                        data: {lamina, libreta},
+                    },
+                });
             });
+
+            logger.info(separador);
         });
-
-        logger.info(separador);
-
     } catch (e) {
         logger.error(e);
         res.status(400).send({
-            code: 400,
-            message: 'Error al procesar respuesta: "' + e + '"',
+            error: {
+                code: 400,
+                message: 'Error al procesar respuesta: "' + e + '"',
+            },
+            result: null,
         });
     }
 }));
