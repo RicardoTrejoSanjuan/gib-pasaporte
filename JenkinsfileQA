@@ -3,10 +3,10 @@ pipeline {
 
       parameters {
            string(name: 'openshift', defaultValue: 'https://console.dev.openshift.multivaloresgf.local:8443', description: '')
-           string(name: 'openshiftProject', defaultValue: 'codi-qa', description: 'Proyecto de Openshift')
-           string(name: 'imageName', defaultValue: 'codi-08-consultamensajescobrocomprador', description: '')
+           string(name: 'openshiftProject', defaultValue: 'biometricos', description: 'Proyecto de Openshift')
+           string(name: 'imageName', defaultValue: 'gib-pasaportes', description: '')
            string(name: 'nexus', defaultValue: 'nexus-0.dev.openshift.multivaloresgf.local:18444', description: '')
-           string(name: 'imageProject', defaultValue: 'codi', description: 'Proyecto para generar el tag y subir a nexus la imagen')
+           string(name: 'imageProject', defaultValue: 'gib-pasaportes', description: 'Proyecto para generar el tag y subir a nexus la imagen')
            string(name: 'timezone', defaultValue:'America/Mexico_City', description: 'Zona horaria (logs)')
            string(name: 'languaje', defaultValue:'es', description: 'lenguaje (logs)')
            string(name: 'tagSource', defaultValue: 'dev', description: 'Imagen fuente')

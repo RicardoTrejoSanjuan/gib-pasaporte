@@ -3,13 +3,15 @@ pipeline {
 
       parameters {
            string(name: 'openshift', defaultValue: 'https://console.dev.openshift.multivaloresgf.local:8443', description: '')
+           string(name: 'openshiftProject', defaultValue: 'biometricos', description: '')
            string(name: 'npmRegistry', defaultValue: 'http://nexus-0.dev.openshift.multivaloresgf.local:8081/repository/npm-group/', description: '')
-           string(name: 'imageName', defaultValue: 'codi-08-consultamensajescobrocomprador', description: '')
            string(name: 'nexus', defaultValue: 'nexus-0.dev.openshift.multivaloresgf.local:18444', description: '')
-           string(name: 'project', defaultValue: 'codi', description: '')
+           string(name: 'imageName', defaultValue: 'gib-pasaportes', description: '')
+           string(name: 'project', defaultValue: 'biometricos-qa', description: '')
+           string(name: 'tag', defaultValue: 'dev', description: 'TAG de la imagen')
+           string(name: 'configMap', defaultValue: 'biometricosqa-api', description: 'Config map donde se encuantran las variables de entorno')
            string(name: 'timezone', defaultValue:'America/Mexico_City', description: 'Zona horaria (logs)')
            string(name: 'languaje', defaultValue:'es', description: 'lenguaje (logs)')
-           string(name: 'tag', defaultValue: 'dev', description: 'TAG de la imagen')
       }
 
   stages{
@@ -47,7 +49,6 @@ pipeline {
                     oc delete imagestream ${params.imageName} --ignore-not-found=true
                     oc import-image ${params.nexus}/codi/${params.imageName}:${params.tag} --confirm
                     oc apply -f deploy/dc.${params.tag}.yaml
-                    oc expose dc/${params.imageName}
                 fi
                 """
             }

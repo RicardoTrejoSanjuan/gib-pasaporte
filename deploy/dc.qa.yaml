@@ -2,21 +2,21 @@ apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
   labels:
-    app: codi-08-consultamensajescobrocomprador
-    deploymentconfig: codi-08-consultamensajescobrocomprador
-  name: codi-08-consultamensajescobrocomprador
+    app: gib-pasaportes
+    deploymentconfig: gib-pasaportes
+  name: gib-pasaportes
 spec:
   replicas: 1
   revisionHistoryLimit: 1
   selector:
-    app: codi-08-consultamensajescobrocomprador
-    deploymentconfig: codi-08-consultamensajescobrocomprador
+    app: gib-pasaportes
+    deploymentconfig: gib-pasaportes
   template:
     metadata:
       labels:
-        app: codi-08-consultamensajescobrocomprador
-        deploymentconfig: codi-08-consultamensajescobrocomprador
-      name: codi-08-consultamensajescobrocomprador
+        app: gib-pasaportes
+        deploymentconfig: gib-pasaportes
+      name: gib-pasaportes
     spec:
       containers:
       - env:
@@ -27,16 +27,10 @@ spec:
               fieldPath: status.hostIP
         envFrom:
         - configMapRef:
-            name: proxy
-        - configMapRef:
-            name: banxico
-        - configMapRef:
             name: conexion-postgres
-        - configMapRef:
-            name: commons-routes
-        image: nexus-0.dev.openshift.multivaloresgf.local:18444/codi/codi-08-consultamensajescobrocomprador:qa
+        image: nexus-0.dev.openshift.multivaloresgf.local:18444/codi/gib-pasaportes:qa
         imagePullPolicy: IfNotPresent
-        name: codi-08-consultamensajescobrocomprador
+        name: gib-pasaportes
         readinessProbe:
           failureThreshold: 3
           httpGet:
@@ -67,8 +61,8 @@ spec:
     imageChangeParams:
       automatic: true
       containerNames:
-      - codi-08-consultamensajescobrocomprador
+      - gib-pasaportes
       from:
         kind: ImageStreamTag
-        name: codi-08-consultamensajescobrocomprador:qa
+        name: gib-pasaportes:qa
         namespace: codi-qa
